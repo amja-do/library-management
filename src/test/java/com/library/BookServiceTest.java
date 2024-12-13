@@ -15,6 +15,8 @@ class BookServiceTest {
     @BeforeEach
     void setUp() {
         bookService = new BookService();
+        bookDAO = new BookDAO();
+        bookService.deleteAllBooks();
     }
 
     @Test

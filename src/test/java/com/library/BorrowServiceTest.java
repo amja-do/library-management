@@ -31,6 +31,9 @@ class BorrowServiceTest {
         bookService = new BookService();
         studentService = new StudentService();
         borrowService = new BorrowService(borrowDAO);
+        borrowService.deleteAllBorrows();
+        bookService.deleteAllBooks();
+        studentService.deleteAllStudents();
 
         student1 = new Student(1, "Alice");
         student2 = new Student(2, "Bob");

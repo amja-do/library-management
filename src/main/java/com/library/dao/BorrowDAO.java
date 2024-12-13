@@ -21,8 +21,7 @@ public class BorrowDAO {
         String query = "SELECT * FROM borrows";
         Student student;
         Book book;
-        try (Connection connection = DbConnection.getConnection();
-                Statement stmt = connection.createStatement();
+        try ( Statement stmt = DbConnection.getConnection().createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 student = studentDAO.getStudentById(rs.getInt("member"));
@@ -43,8 +42,7 @@ public class BorrowDAO {
 
     public void save(Borrow borrow) {
         String query = "UPDATE borrows SET member = ?, book = ?, borrow_date = ?, return_date = ? WHERE id = ?";
-        try (Connection connection = DbConnection.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = DbConnection.getConnection().prepareStatement(query)) {
             stmt.setInt(1, borrow.getStudent().getId());
             stmt.setInt(2, borrow.getBook().getId());
             stmt.setDate(3, new java.sql.Date(borrow.getBorrowDate().getTime()));
@@ -57,15 +55,11 @@ public class BorrowDAO {
     }
 
     public String addBorrow(Borrow borrow) {
-        if(new StudentService().findStudentById(borrow.getStudent().getId()) == null){
-            throw new InvalidParameterException("L'étudiant n'existe pas!");
-        }
-        if(new BookDAO().getBookById(borrow.getBook().getId()) == null){
-            throw new InvalidParameterException("Le livre n'existe pas!");
+        if(new StudentService().findStudentById(borrow.getStudent().getId()) == null || new BookDAO().getBookById(borrow.getBook().getId()) == null){
+            return "Étudiant ou livre non trouvé.";
         }
         String query = "INSERT INTO borrows (id, member, book, borrow_date, return_date) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = DbConnection.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = DbConnection.getConnection().prepareStatement(query)) {
             stmt.setInt(1, borrow.getId());
             stmt.setInt(2, borrow.getStudent().getId());
             stmt.setInt(3, borrow.getBook().getId());
@@ -74,11 +68,7 @@ public class BorrowDAO {
             stmt.executeUpdate();
             return "Livre emprunté avec succès!";
         } catch (SQLException e) {
-            e.printStackTrace();
             return "Erreur lors de l'emprunt!";
-        } catch (InvalidParameterException e) {
-            e.printStackTrace();
-            return "Étudiant ou livre non trouvé.";
         }
     }
 
@@ -88,8 +78,7 @@ public class BorrowDAO {
         String query = "SELECT * FROM borrows WHERE id = ?";
         Student student;
         Book book;
-        try (Connection connection = DbConnection.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = DbConnection.getConnection().prepareStatement(query)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -111,14 +100,22 @@ public class BorrowDAO {
 
     public String deleteBorrow(int id) {
         String query = "DELETE FROM borrows WHERE id = ?";
-        try (Connection connection = DbConnection.getConnection();
-                PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = DbConnection.getConnection().prepareStatement(query)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
             return "Livre retourné avec succès!";
         } catch (SQLException e) {
             e.printStackTrace();
             return "Erreur lors du retour du livre!";
+        }
+    }
+
+    public void deleteAll() {
+        String query = "DELETE FROM borrows";
+        try (Statement stmt = DbConnection.getConnection().createStatement()) {
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -39,4 +39,9 @@ public class BookService {
     public void updateBook(Book book) {
         bookDAO.update(book);
     }
+
+    // Supprimer tous les livres
+    public void deleteAllBooks() {
+        bookDAO.deleteAll();
+    }
 }

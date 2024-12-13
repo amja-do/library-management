@@ -16,13 +16,14 @@ class StudentServiceTest {
     void setUp() {
         studentDAO = new StudentDAO();
         studentService = new StudentService(studentDAO);
+        studentService.deleteAllStudents();
     }
 
     @Test
     void testAddStudent() {
         studentService.addStudent(new Student(1, "Alice"));
-        assertEquals(5, studentDAO.getAllStudents().size());
-        assertEquals("Alice", studentDAO.getStudentById(5).getName());
+        assertEquals(1, studentDAO.getAllStudents().size());
+        assertEquals("Alice", studentDAO.getStudentById(1).getName());
     }
 
     @Test
@@ -41,7 +42,6 @@ class StudentServiceTest {
 
     @Test
     void testGetAllStudents() {
-        studentService.deleteAllStudents();
         studentService.addStudent(new Student(1, "Alice"));
         studentService.addStudent(new Student(2, "Bob"));
         assertEquals(2, studentDAO.getAllStudents().size());

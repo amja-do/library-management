@@ -32,4 +32,8 @@ public class BorrowService {
     public String deleteBorrow(int id) {
         return borrowDAO.deleteBorrow(id);
     }
+
+    public void deleteAllBorrows() {
+        borrowDAO.deleteAll();
+    }
 }
