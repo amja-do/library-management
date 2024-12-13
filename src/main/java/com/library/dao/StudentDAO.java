@@ -1,6 +1,8 @@
 package com.library.dao;
 
 import com.library.model.Student;
+import com.library.util.DbConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,9 @@ public class StudentDAO {
 
     public StudentDAO(Connection connection) {
         this.connection = connection;
+    }
+    public StudentDAO() {
+        this.connection = DbConnection.getConnection();
     }
 
     public void addStudent(Student student) {
@@ -75,6 +80,15 @@ public class StudentDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Erreur lors de la suppression de l'étudiant", e);
+        }
+    }
+
+    public void deleteAllStudents() {
+        String query = "DELETE FROM students";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Erreur lors de la suppression de tous les étudiants", e);
         }
     }
 }

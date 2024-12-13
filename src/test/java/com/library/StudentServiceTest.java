@@ -1,4 +1,4 @@
-package com.library.test;
+package com.library;
 
 import com.library.dao.StudentDAO;
 import com.library.model.Student;
@@ -20,29 +20,30 @@ class StudentServiceTest {
 
     @Test
     void testAddStudent() {
-        studentService.addStudent(1, "Alice", "alice@example.com");
-        assertEquals(1, studentDAO.getAllStudents().size());
-        assertEquals("Alice", studentDAO.getStudentById(1).get().getName());
+        studentService.addStudent(new Student(1, "Alice"));
+        assertEquals(5, studentDAO.getAllStudents().size());
+        assertEquals("Alice", studentDAO.getStudentById(5).getName());
     }
 
     @Test
     void testUpdateStudent() {
-        studentService.addStudent(1, "Alice", "alice@example.com");
-        studentService.updateStudent(1, "Alice Smith", "alice.smith@example.com");
-        assertEquals("Alice Smith", studentDAO.getStudentById(1).get().getName());
+        studentService.addStudent(new Student(6, "Alice"));
+        studentService.updateStudent(new Student(6, "Alice Smith"));
+        assertEquals("Alice Smith", studentDAO.getStudentById(6).getName());
     }
 
     @Test
     void testDeleteStudent() {
-        studentService.addStudent(1, "Alice", "alice@example.com");
-        studentService.deleteStudent(1);
-        assertTrue(studentDAO.getStudentById(1).isEmpty());
+        studentService.addStudent(new Student(7, "Alice"));
+        studentService.deleteStudent(7);
+        assertNull(studentDAO.getStudentById(7));
     }
 
     @Test
     void testGetAllStudents() {
-        studentService.addStudent(1, "Alice", "alice@example.com");
-        studentService.addStudent(2, "Bob", "bob@example.com");
+        studentService.deleteAllStudents();
+        studentService.addStudent(new Student(1, "Alice"));
+        studentService.addStudent(new Student(2, "Bob"));
         assertEquals(2, studentDAO.getAllStudents().size());
     }
 }

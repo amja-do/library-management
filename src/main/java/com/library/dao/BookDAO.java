@@ -54,6 +54,55 @@ public class BookDAO {
         
         return book;
     }
+
+    public Book getBookById(int id) {
+        String sql = "SELECT * FROM books WHERE id = ?";
+        
+        try {
+            PreparedStatement preparedStatement = DbConnection.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return new Book(
+                    resultSet.getInt("id"),
+                    resultSet.getString("title"),
+                    resultSet.getString("author"),
+                    resultSet.getString("isbn"),
+                    resultSet.getInt("published_year")
+                );
+            }
+            return null;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public void delete(int id){
+        String sql = "DELETE FROM books WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = DbConnection.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void update(Book book){
+        String sql = "UPDATE books SET title = ?, author = ?, isbn = ?, published_year = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = DbConnection.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, book.getTitle());
+            preparedStatement.setString(2, book.getAuthor());
+            preparedStatement.setString(3, book.getIsbn());
+            preparedStatement.setInt(4, book.getPublishedYear());
+            preparedStatement.setInt(5, book.getId());
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
     
     // Récupérer tous les livres
     public List<Book> getAllBooks() {

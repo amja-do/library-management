@@ -2,7 +2,6 @@ package com.library.service;
 
 import com.library.dao.StudentDAO;
 import com.library.model.Student;
-import java.sql.SQLException;
 import java.util.List;
 
 public class StudentService {
@@ -23,7 +22,7 @@ public class StudentService {
     public void addStudent(Student student) {
         try {
             studentDAO.addStudent(student);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println("Erreur lors de l'ajout de l'étudiant : " + e.getMessage());
         }
     }
@@ -35,7 +34,7 @@ public class StudentService {
             for (Student student : students) {
                 System.out.println("ID: " + student.getId() + " | Nom: " + student.getName());
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println("Erreur lors de l'affichage des étudiants : " + e.getMessage());
         }
     }
@@ -44,9 +43,31 @@ public class StudentService {
     public Student findStudentById(int id) {
         try {
             return studentDAO.getStudentById(id);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println("Erreur lors de la recherche de l'étudiant par ID : " + e.getMessage());
         }
         return null;
+    }
+
+    // Supprimer un étudiant par ID
+    public void deleteStudent(int id) {
+        try {
+            studentDAO.deleteStudent(id);
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la suppression de l'étudiant : " + e.getMessage());
+        }
+    }
+
+    public void updateStudent(Student student) {
+        studentDAO.updateStudent(student);
+    }
+
+    // delete all students
+    public void deleteAllStudents() {
+        try {
+            studentDAO.deleteAllStudents();
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la suppression de tous les étudiants : " + e.getMessage());
+        }
     }
 }

@@ -14,6 +14,10 @@ public class Student {
         this.name = name;
     }
 
+    public Student(String name) {
+        this.name = name;
+    }
+
     // Getters et Setters
     public int getId() {
         return id;

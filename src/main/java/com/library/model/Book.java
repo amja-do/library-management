@@ -4,19 +4,27 @@ public class Book {
     private int id;
     private String title;
     private String author;
-    private String publisher;
-    private int year;
+    private String isbn;
+    private int publishedYear;
 
     // Constructeur par défaut
     public Book() {
     }
 
     // Constructeur complet
-    public Book(String title, String author, String publisher, int year) {
+    public Book(int id, String title, String author, String isbn, int publishedYear) {
+        this.id = id;
         this.title = title;
         this.author = author;
-        this.publisher = publisher;
-        this.year = year;
+        this.isbn = isbn;
+        this.publishedYear = publishedYear;
+    }
+
+    public Book(String title, String author, String isbn, int publishedYear) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.publishedYear = publishedYear;
     }
 
     // Constructeur additionnel si nécessaire
@@ -50,19 +58,21 @@ public class Book {
         this.author = author;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public int getYear() {
-        return year;
+    public int getPublishedYear() {
+        return publishedYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setPublishedYear(int publishedYear) {
+        this.publishedYear = publishedYear;
     }
+
+    
 }
