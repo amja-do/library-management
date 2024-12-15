@@ -10,11 +10,13 @@ import com.library.util.DbConnection;
 public class Helper {
 
     public static int getEntityId(String entityName, String primaryColumnName) {
-        String sql = "SELECT max(" + primaryColumnName + ") FROM " + entityName;
+        String sql = "SELECT max(?) FROM ?";
 
         try (Connection connection = DbConnection.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
+            preparedStatement.setString(1, primaryColumnName);
+            preparedStatement.setString(2, entityName);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
@@ -28,11 +30,12 @@ public class Helper {
     }
 
     public static int getEntityId(String entityName) {
-        String sql = "SELECT max(id) FROM " + entityName;
+        String sql = "SELECT max(id) FROM ?";
 
         try (Connection connection = DbConnection.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
+            preparedStatement.setString(1, entityName);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
