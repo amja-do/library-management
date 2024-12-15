@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/amja-do/library-management.git'
+                git url: 'https://github.com/amja-do/library-management.git', branch: 'main'
             }
         }
         stage('Build') {
