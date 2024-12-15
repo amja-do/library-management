@@ -27,10 +27,8 @@ pipeline {
 				   
 					withSonarQubeEnv('SonarQube') {
 						sh """
-                            ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
+                             mvn sonar:sonar \
                             -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=http://host.docker.internal:9000 \
                             -Dsonar.login=${SONAR_TOKEN}
                     	"""
 					}	
