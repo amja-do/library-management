@@ -2,11 +2,13 @@ pipeline {
     agent any
     environment {
         MAVEN_HOME = tool 'Maven'
+        SONAR_PROJECT_KEY = 'library-management'
+		SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
     }
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/votre-depot/GestionBibliotheque.git'
+                git 'https://github.com/amja-do/library-management.git'
             }
         }
         stage('Build') {
@@ -21,10 +23,19 @@ pipeline {
         }
         stage('Quality Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '${MAVEN_HOME}/bin/mvn sonar:sonar'
-                }
-            }
+				withCredentials([string(credentialsId: 'SonarQube-library-management-token', variable: 'SONAR_TOKEN')]) {
+				   
+					withSonarQubeEnv('SonarQube') {
+						sh """
+                            ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=${SONAR_TOKEN}
+                    	"""
+					}	
+				}
+			}
         }
         stage('Deploy') {
             steps {
@@ -34,12 +45,12 @@ pipeline {
     }
     post {
         success {
-            emailext to: 'votre-email@example.com',
+            emailext to: 'amri.amjado@example.com',
                 subject: 'Build Success',
                 body: 'Le build a été complété avec succès.'
         }
         failure {
-            emailext to: 'votre-email@example.com',
+            emailext to: 'amri.amjado@example.com',
                 subject: 'Build Failed',
                 body: 'Le build a échoué.'
         }
