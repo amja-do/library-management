@@ -10,8 +10,10 @@ import com.library.util.DbConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class BorrowDAO {
+    private static final Logger LOGGER = Logger.getLogger(BorrowDAO.class.getName());
 
     public List<Borrow> getAllBorrows() {
         StudentDAO studentDAO = new StudentDAO();
@@ -34,7 +36,7 @@ public class BorrowDAO {
                 borrows.add(borrow);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe("Erreur lors de la récupération des emprunts : " + e.getMessage());
         }
         return borrows;
     }
@@ -49,7 +51,7 @@ public class BorrowDAO {
             stmt.setInt(5, borrow.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe("Erreur lors de la mise à jour de l'emprunt : " + e.getMessage());
         }
     }
 
@@ -92,7 +94,7 @@ public class BorrowDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe("Erreur lors de la récupération de l'emprunt : " + e.getMessage());
         }
         return null;
     }
@@ -104,7 +106,7 @@ public class BorrowDAO {
             stmt.executeUpdate();
             return "Livre retourné avec succès!";
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe("Erreur lors du retour du livre : " + e.getMessage());
             return "Erreur lors du retour du livre!";
         }
     }
@@ -114,7 +116,7 @@ public class BorrowDAO {
         try (Statement stmt = DbConnection.getConnection().createStatement()) {
             stmt.executeUpdate(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.severe("Erreur lors du retour de tous les livres : " + e.getMessage());
         }
     }
 }

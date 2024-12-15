@@ -1,13 +1,16 @@
 package com.library.util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DbConnection {
-    private static final String URL = "jdbc:mysql://host.docker.internal:3306/library_db";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static String url;
+    private static String user;
+    private static String password;
     private static Connection connection;
 
     private DbConnection() {
@@ -18,9 +21,17 @@ public class DbConnection {
             if(connection != null && !connection.isClosed()) {
                 return connection;
             }
+
+            Properties props = new Properties();
+            props.load(new FileInputStream("config.properties"));
+
+            url = props.getProperty("db.url");
+            user = props.getProperty("db.user");
+            password = props.getProperty("db.password");
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-            return connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
+            return connection = DriverManager.getConnection(url, user, password);
+        } catch (ClassNotFoundException | SQLException | IOException e) {
             System.out.println("Erreur lors de la connexion à la base de données : " + e.getMessage());
             return null;
         }
