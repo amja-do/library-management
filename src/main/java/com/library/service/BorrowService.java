@@ -23,9 +23,14 @@ public class BorrowService {
 
     // Afficher les emprunts (méthode fictive, à adapter)
     public List<Borrow> displayBorrows() {
-        System.out.println("Liste des emprunts...");
-        // Afficher les emprunts enregistrés (adapté selon votre DAO)
-        return borrowDAO.getAllBorrows();
+        List<Borrow> borrows = borrowDAO.getAllBorrows();
+        if(borrows != null)
+        {
+            for (Borrow borrow : borrows) {
+                System.out.println(borrow.getId());
+            }
+        }
+        return borrows;
     }
 
     public Borrow getBorrowById(int id) {

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class BookDAO {
-    private final Logger logger = Logger.getLogger(DbConnection.class.getName());
+    private final Logger logger = Logger.getLogger(BookDAO.class.getName());
 
     // Ajouter un nouveau livre dans la base de données
     public String add(Book book) {
