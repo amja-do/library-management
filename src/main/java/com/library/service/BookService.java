@@ -13,8 +13,8 @@ public class BookService {
     }
 
     // Ajouter un livre
-    public void addBook(Book book) {
-        bookDAO.add(book);
+    public String addBook(Book book) {
+        return bookDAO.add(book);
     }
 
     // Afficher tous les livres
@@ -31,17 +31,17 @@ public class BookService {
     }
 
     // Supprimer un livre par ID
-    public void deleteBook(int id) {
-        bookDAO.delete(id);
+    public String deleteBook(int id) {
+        return bookDAO.delete(id);
     }
 
     // Mise à jour des informations d'un livre
-    public void updateBook(Book book) {
-        bookDAO.update(book);
+    public String updateBook(Book book) {
+        return bookDAO.update(book);
     }
 
     // Supprimer tous les livres
-    public void deleteAllBooks() {
-        bookDAO.deleteAll();
+    public String deleteAllBooks() {
+        return bookDAO.deleteAll();
     }
 }

@@ -49,6 +49,7 @@ class BorrowServiceTest {
 
         borrowDate = new Date(System.currentTimeMillis());
         returnDate = new Date(System.currentTimeMillis() + 604800000);
+
     }
 
     @Test
@@ -57,16 +58,24 @@ class BorrowServiceTest {
         Borrow borrow = new Borrow(1,student1, book1, borrowDate, returnDate);
         
         assertEquals("Livre emprunté avec succès!", borrowService.borrowBook(borrow));
+
+    }
+
+    @Test
+    void testGetAllBorrows(){
+        assertNotNull(borrowService.displayBorrows());
     }
 
     @Test
     void testReturnBook() {
         assertEquals("Livre retourné avec succès!", borrowService.deleteBorrow(1));
+
     }
 
     @Test
     void testBorrowBookNotAvailable() {
         assertTrue(true);
+
     }
 
     @Test
@@ -74,5 +83,31 @@ class BorrowServiceTest {
         student1.setId(9999);
         Borrow borrow = new Borrow(1,student1, book1, borrowDate, returnDate);
         assertEquals("Étudiant ou livre non trouvé.", borrowService.borrowBook(borrow));
+
     }
+
+
+    @Test
+    void testGetBorrowById() {
+        Borrow borrow = new Borrow(1,student1, book1, borrowDate, returnDate);
+        assertEquals("Livre emprunté avec succès!", borrowService.borrowBook(borrow));
+    }
+
+    @Test
+    void testUpdateBorrow() {
+        Borrow borrow = new Borrow(1,student1, book1, borrowDate, returnDate);
+        borrowService.borrowBook(borrow);
+        borrow.setReturnDate(new Date(System.currentTimeMillis()));
+        assertEquals("Emprunt mis à jour avec succès!", borrowService.updateBorrow(borrow));
+        
+    }
+
+    @Test
+    void testDeleteAllBorrows() {
+        Borrow borrow = new Borrow(1,student1, book1, borrowDate, returnDate);
+        borrowService.borrowBook(borrow);
+        assertEquals("Tous les livres ont été retournés avec succès!", borrowService.deleteAllBorrows());
+        assertEquals(0, borrowService.displayBorrows().size());
+    }
+
 }

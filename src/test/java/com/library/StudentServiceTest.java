@@ -17,6 +17,7 @@ class StudentServiceTest {
         studentDAO = new StudentDAO();
         studentService = new StudentService(studentDAO);
         studentService.deleteAllStudents();
+
     }
 
     @Test
@@ -24,6 +25,7 @@ class StudentServiceTest {
         studentService.addStudent(new Student(1, "Alice"));
         assertEquals(1, studentDAO.getAllStudents().size());
         assertEquals("Alice", studentDAO.getStudentById(1).getName());
+
     }
 
     @Test
@@ -31,6 +33,7 @@ class StudentServiceTest {
         studentService.addStudent(new Student(6, "Alice"));
         studentService.updateStudent(new Student(6, "Alice Smith"));
         assertEquals("Alice Smith", studentDAO.getStudentById(6).getName());
+
     }
 
     @Test
@@ -38,6 +41,7 @@ class StudentServiceTest {
         studentService.addStudent(new Student(7, "Alice"));
         studentService.deleteStudent(7);
         assertNull(studentDAO.getStudentById(7));
+
     }
 
     @Test
@@ -45,5 +49,6 @@ class StudentServiceTest {
         studentService.addStudent(new Student(1, "Alice"));
         studentService.addStudent(new Student(2, "Bob"));
         assertEquals(2, studentDAO.getAllStudents().size());
+        
     }
 }

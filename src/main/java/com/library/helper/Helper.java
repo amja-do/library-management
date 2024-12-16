@@ -4,20 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.library.util.DbConnection;
 
 public class Helper {
 
     public static int getEntityId(String entityName, String primaryColumnName) {
-        String sql = "SELECT max(?) FROM ?";
+        String sql = "SELECT max("+ primaryColumnName +") FROM " + entityName;
 
         try (Connection connection = DbConnection.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                Statement statement = connection.createStatement()) {
 
-            preparedStatement.setString(1, primaryColumnName);
-            preparedStatement.setString(2, entityName);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = statement.executeQuery(sql);
 
             if (resultSet.next()) {
                 return resultSet.getInt(1) + 1;
@@ -30,13 +29,12 @@ public class Helper {
     }
 
     public static int getEntityId(String entityName) {
-        String sql = "SELECT max(id) FROM ?";
+        String sql = "SELECT max(id) FROM " + entityName;
 
         try (Connection connection = DbConnection.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                Statement statement = connection.createStatement()) {
 
-            preparedStatement.setString(1, entityName);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = statement.executeQuery(sql);
 
             if (resultSet.next()) {
                 return resultSet.getInt(1) + 1;

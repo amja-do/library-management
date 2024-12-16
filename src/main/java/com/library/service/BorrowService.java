@@ -1,6 +1,8 @@
 
 package com.library.service;
 
+import java.util.List;
+
 import com.library.dao.BorrowDAO;
 import com.library.model.Borrow;
 
@@ -20,9 +22,10 @@ public class BorrowService {
     }
 
     // Afficher les emprunts (méthode fictive, à adapter)
-    public void displayBorrows() {
+    public List<Borrow> displayBorrows() {
         System.out.println("Liste des emprunts...");
         // Afficher les emprunts enregistrés (adapté selon votre DAO)
+        return borrowDAO.getAllBorrows();
     }
 
     public Borrow getBorrowById(int id) {
@@ -33,7 +36,11 @@ public class BorrowService {
         return borrowDAO.deleteBorrow(id);
     }
 
-    public void deleteAllBorrows() {
-        borrowDAO.deleteAll();
+    public String deleteAllBorrows() {
+        return borrowDAO.deleteAll();
+    }
+
+    public String updateBorrow(Borrow borrow) {
+        return borrowDAO.save(borrow);
     }
 }

@@ -18,7 +18,7 @@ public class BorrowDAO {
     public List<Borrow> getAllBorrows() {
         StudentDAO studentDAO = new StudentDAO();
         BookDAO bookDAO = new BookDAO();
-        List<Borrow> borrows = new ArrayList<>();
+        List<Borrow> borrows = new ArrayList<Borrow>();
         String query = "SELECT * FROM borrows";
         Student student;
         Book book;
@@ -35,13 +35,14 @@ public class BorrowDAO {
                         rs.getDate("return_date"));
                 borrows.add(borrow);
             }
+            return borrows;
         } catch (SQLException e) {
             LOGGER.severe("Erreur lors de la récupération des emprunts : " + e.getMessage());
         }
-        return borrows;
+        return null;
     }
 
-    public void save(Borrow borrow) {
+    public String save(Borrow borrow) {
         String query = "UPDATE borrows SET member = ?, book = ?, borrow_date = ?, return_date = ? WHERE id = ?";
         try (PreparedStatement stmt = DbConnection.getConnection().prepareStatement(query)) {
             stmt.setInt(1, borrow.getStudent().getId());
@@ -50,8 +51,10 @@ public class BorrowDAO {
             stmt.setDate(4, new java.sql.Date(borrow.getReturnDate().getTime()));
             stmt.setInt(5, borrow.getId());
             stmt.executeUpdate();
+            return "Emprunt mis à jour avec succès!";
         } catch (SQLException e) {
             LOGGER.severe("Erreur lors de la mise à jour de l'emprunt : " + e.getMessage());
+            return "Erreur lors de la mise à jour de l'emprunt!";
         }
     }
 
@@ -67,6 +70,7 @@ public class BorrowDAO {
             stmt.setDate(4, new java.sql.Date(borrow.getBorrowDate().getTime()));
             stmt.setDate(5, new java.sql.Date(borrow.getReturnDate().getTime()));
             stmt.executeUpdate();
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!! " + borrow.getId());
             return "Livre emprunté avec succès!";
         } catch (SQLException e) {
             return "Erreur lors de l'emprunt!";
@@ -111,12 +115,14 @@ public class BorrowDAO {
         }
     }
 
-    public void deleteAll() {
+    public String deleteAll() {
         String query = "DELETE FROM borrows";
         try (Statement stmt = DbConnection.getConnection().createStatement()) {
             stmt.executeUpdate(query);
+            return "Tous les livres ont été retournés avec succès!";
         } catch (SQLException e) {
             LOGGER.severe("Erreur lors du retour de tous les livres : " + e.getMessage());
+            return "Erreur lors du retour de tous les livres!";
         }
     }
 }
