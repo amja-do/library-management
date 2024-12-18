@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
+                withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_PAT')]) {
                 script {
                     if (fileExists('library-management')) {
                         dir('library-management') {
@@ -18,6 +19,7 @@ pipeline {
                     } else {
                         sh "git clone https://${GITHUB_PAT}@github.com/amja-do/library-management.git"
                     }
+                }
                 }
             }
         }
