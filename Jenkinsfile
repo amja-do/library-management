@@ -6,9 +6,19 @@ pipeline {
 		SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
     }
     stages {
-        stage('Checkout') {
+        stage('checkout') {
             steps {
-                git url: 'https://github.com/amja-do/library-management.git', branch: 'main'
+                script {
+                    if (fileExists('library-management')) {
+                        dir('library-management') {
+                            sh "git reset --hard" 
+                            sh "git clean -fd" 
+                            sh "git pull origin main"
+                        }
+                    } else {
+                        sh "git clone https://${GITHUB_PAT}@github.com/amja-do/library-management.git"
+                    }
+                }
             }
         }
         stage('Build') {
